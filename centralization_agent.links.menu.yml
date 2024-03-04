@@ -1,0 +1,5 @@
+centralization_agent.admin_settings:
+  title: 'Centralization Agent configuration'
+  parent: system.admin_config_system
+  description: 'Configure Centralization Agent module.'
+  route_name: centralization_agent.admin_settings

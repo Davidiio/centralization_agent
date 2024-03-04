@@ -1,0 +1,3 @@
+services:
+  centralization_agent.encrypt:
+    class: Drupal\centralization_agent\Services\CentralizationAgentEncryption

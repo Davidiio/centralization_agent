@@ -1,0 +1,7 @@
+core : 8.x
+core_version_requirement: ^8 || ^9 || ^10
+type: module
+name : Centralization Agent
+description : "Exposes an end point for Centralization module to get this site informations."
+configure : centralization_agent.admin_settings
+
