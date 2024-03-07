@@ -99,13 +99,17 @@ class CentralizationAgentController extends ControllerBase {
     $this->moduleHandler()->loadInclude('update', 'compare.inc');
     $available_updates = update_calculate_project_data($available);
     $general_update_status = 5;
+
     foreach ($available_updates as $key => $available_update) {
+      if($key == "drupal") {
+        $drupal_core_update_status = $available_update['status'];
+        continue;
+      }
       if($available_update['status'] < $general_update_status) {
         $general_update_status = $available_update['status'];
       }
     }
 
-    //dsm($available_updates);
     // ob_start();
     // phpinfo();
     // $info = ob_get_contents();
@@ -132,6 +136,7 @@ class CentralizationAgentController extends ControllerBase {
       "themes" => [],
       "available_updates" => $available_updates,
       "general_update_status" => $general_update_status,
+      "drupal_core_update_status" => $drupal_core_update_status,
     ];
 
     $drupal_modules = $this->moduleHandler->getModuleList();

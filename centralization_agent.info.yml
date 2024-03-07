@@ -5,4 +5,3 @@ name : Centralization Agent
 version: 1.0.0
 description : "Exposes an end point for Centralization module to get this site informations."
 configure : centralization_agent.admin_settings
-
