@@ -123,7 +123,17 @@ class CentralizationAgentController extends ControllerBase {
     $admin_theme = \Drupal::config('system.theme')->get('admin');
     $default_theme = \Drupal::config('system.theme')->get('default');
     $site_name = \Drupal::config('system.site')->get('name');
-
+    
+    $database_name = \Drupal::database()->getConnectionOptions()['database'];
+    $database_size_query = \Drupal::database()->query(
+      "SELECT
+        ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) AS 'size'
+      FROM
+        information_schema.tables
+      WHERE
+        table_schema = '" . $database_name . "';"
+      )->fetchAll();
+    $database_size = $database_size_query[0]->size;
     // Needless initialisation, but hey.
     $res = [
       "site_name" => $site_name,
@@ -132,6 +142,7 @@ class CentralizationAgentController extends ControllerBase {
       //"php_info" => $php_info,
       "admin_theme" => $admin_theme,
       "default_theme" => $default_theme,
+      "database_size" => $database_size,
       "modules" => [],
       "themes" => [],
       "available_updates" => $available_updates,
