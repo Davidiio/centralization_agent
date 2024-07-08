@@ -214,6 +214,13 @@ class CentralizationAgentController extends ControllerBase {
     ]);
   }
 
+  public function cache_clear($centralization_agent_id) {
+    drupal_flush_all_caches();
+    return new JsonResponse([
+      "data" => "cache flushed"
+    ]);
+  }
+
   /**
    * {@inheritdoc}
    */

@@ -5,6 +5,13 @@ centralization_agent.status_page:
   requirements:
     _custom_access: '\Drupal\centralization_agent\Controller\CentralizationAgentController::access'
 
+centralization_agent.cache_clear:
+  path: '/admin/reports/centralization-agent/cc/{centralization_agent_id}'
+  defaults:
+    _controller: '\Drupal\centralization_agent\Controller\CentralizationAgentController::cache_clear'
+  requirements:
+    _custom_access: '\Drupal\centralization_agent\Controller\CentralizationAgentController::access'
+
 centralization_agent.admin_settings:
   path: '/admin/config/system/centralization-agent-configuration'
   defaults:
