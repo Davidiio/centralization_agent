@@ -1,7 +1,7 @@
-core_version_requirement: ^8 || ^9 || ^10
+name : Centralization Agent
 type: module
 package: Custom
-name : Centralization Agent
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 version: 1.0.0
 description : "Exposes an end point for Centralization module to get this site informations."
 configure : centralization_agent.admin_settings
