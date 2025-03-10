@@ -123,7 +123,7 @@ class CentralizationAgentController extends ControllerBase {
     $admin_theme = \Drupal::config('system.theme')->get('admin');
     $default_theme = \Drupal::config('system.theme')->get('default');
     $site_name = \Drupal::config('system.site')->get('name');
-    
+    $database_client = \Drupal::database()->clientVersion();
     $database_name = \Drupal::database()->getConnectionOptions()['database'];
     $database_size_query = \Drupal::database()->query(
       "SELECT
@@ -143,6 +143,7 @@ class CentralizationAgentController extends ControllerBase {
       "admin_theme" => $admin_theme,
       "default_theme" => $default_theme,
       "database_size" => $database_size,
+      "database_client" => $database_client,
       "modules" => [],
       "themes" => [],
       "available_updates" => $available_updates,
