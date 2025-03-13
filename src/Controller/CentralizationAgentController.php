@@ -117,13 +117,16 @@ class CentralizationAgentController extends ControllerBase {
     // $matches = [];
     // preg_match('/>System <\/td><td class="v">(.*)<\/td>/', $info, $matches);
     // $php_info = $matches[1];
+    
+    $requirements = \Drupal::service('system.manager')->listRequirements();
 
     $php_version = phpversion();
     $drupal_version = \Drupal::VERSION;
     $admin_theme = \Drupal::config('system.theme')->get('admin');
     $default_theme = \Drupal::config('system.theme')->get('default');
     $site_name = \Drupal::config('system.site')->get('name');
-    $database_client = \Drupal::database()->clientVersion();
+    $database_system = $requirements['database_system']['value']->render();
+    $database_system_version = $requirements['database_system_version']['value'];
     $database_name = \Drupal::database()->getConnectionOptions()['database'];
     $database_size_query = \Drupal::database()->query(
       "SELECT
@@ -143,7 +146,7 @@ class CentralizationAgentController extends ControllerBase {
       "admin_theme" => $admin_theme,
       "default_theme" => $default_theme,
       "database_size" => $database_size,
-      "database_client" => $database_client,
+      "database_system" => $database_system,
       "modules" => [],
       "themes" => [],
       "available_updates" => $available_updates,
