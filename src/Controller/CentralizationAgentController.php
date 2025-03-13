@@ -147,6 +147,7 @@ class CentralizationAgentController extends ControllerBase {
       "default_theme" => $default_theme,
       "database_size" => $database_size,
       "database_system" => $database_system,
+      "database_system_version" => $database_system_version,
       "modules" => [],
       "themes" => [],
       "available_updates" => $available_updates,
