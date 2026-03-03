@@ -1,24 +1,18 @@
 <?php
 
 /**
- * @file
- * Drupal system status.
- */
-
-/**
  * Implements hook_help().
  *
  * Displays help and module information.
  */
 function centralization_agent_help($path, $arg) {
   switch ($path) {
-    case 'admin/help#centralization_agent':
-      $output = '<h2>' . $this->t('Centralization Agent information') . '</h2>';
-      $output .= '<p>' . $this->t('Centralization Agent provides informations and local actions to be used by Centralization module.') . '<br/>';
-      $output .= '<p>' . $this->t('How does it work?') . '</p>';
+    case 'help.page.centralization_agent':
+      $output .= '<p>' . t('Centralization Agent provides informations and local actions to be used by Centralization module.') . '<br/>';
+      $output .= '<h2>' . t('How does it work?') . '</h2>';
       $output .= '<ul>';
-      $output .= '<li>' . $this->t('Enable the Centralization Agent module on your Drupal website') . '</li>';
-      $output .= '<li>' . $this->t('Go to Configuration > Sytem > Centralization Agent abnd copy/paste your centralization agent ID to your Centralization module configuration on your centralization site.') . '</li>';
+      $output .= '<li>' . t('Enable the Centralization Agent module on your Drupal website') . '</li>';
+      $output .= '<li>' . t('Go to Configuration > Sytem > Centralization Agent abnd copy/paste your centralization agent ID to your Centralization module configuration on your centralization site.') . '</li>';
       $output .= '</ul>';
 
       return $output;
