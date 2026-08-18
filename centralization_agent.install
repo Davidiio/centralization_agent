@@ -1,9 +1,6 @@
 <?php
 
-/**
- * @file
- * Installation file for system_status.
- */
+use Drupal\Component\Utility\Crypt;
 
 /**
  * Implements hook_install().
