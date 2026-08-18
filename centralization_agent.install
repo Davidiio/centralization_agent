@@ -19,3 +19,19 @@ function centralization_agent_install() {
     $config->save();
   }
 }
+
+/**
+ * Génère les tokens shared_token et encrypt_key s'ils n'existent pas.
+ */
+function centralization_agent_update_10001() {
+  $config = \Drupal::configFactory()->getEditable('centralization_agent.settings');
+
+  if (empty($config->get('encrypt_key'))) {
+    $config->set('shared_token', Crypt::randomBytesBase64(32));
+    $config->set('encrypt_key', base64_encode(random_bytes(32)));
+  }
+
+  $config->save();
+
+  return t('Les tokens shared_token et encrypt_key ont été générés.');
+}
