@@ -90,13 +90,23 @@ class CentralizationAgentController extends ControllerBase {
     $this->encrypt = $encrypt;
   }
 
+  public function refreshUpdateData() {
+    \Drupal::service('update.manager')->refreshUpdateData();
+    return new JsonResponse([
+      "data" => "Update status refreshed"
+    ]);
+  }
+
   public function load(Request $request) {
 
     \Drupal::logger('centralization_agent')->notice('Processing request');
 
-    $available = update_get_available(TRUE);
+    \Drupal::service('update.manager')->refreshUpdateData();
 
+    // Load the update.inc file to get access to the update_get_available() and other functions.
     $this->moduleHandler()->loadInclude('update', 'compare.inc');
+
+    $available = update_get_available(TRUE); // TRUE force le refresh FALSE utilise le cache.
     $available_updates = update_calculate_project_data($available);
     $general_update_status = 5;
 
