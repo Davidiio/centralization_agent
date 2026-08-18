@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\centralization_agent\Services\CentralizationAgentEncryption;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -89,10 +90,9 @@ class CentralizationAgentController extends ControllerBase {
     $this->encrypt = $encrypt;
   }
 
-  /**
-   * Changes Sensei's pants and returns the display of the new status.
-   */
-  public function load($centralization_agent_id) {
+  public function load(Request $request) {
+
+    \Drupal::logger('centralization_agent')->notice('Processing request');
 
     $available = update_get_available(TRUE);
 
@@ -109,14 +109,6 @@ class CentralizationAgentController extends ControllerBase {
         $general_update_status = $available_update['status'];
       }
     }
-
-    // ob_start();
-    // phpinfo();
-    // $info = ob_get_contents();
-    // ob_get_clean();
-    // $matches = [];
-    // preg_match('/>System <\/td><td class="v">(.*)<\/td>/', $info, $matches);
-    // $php_info = $matches[1];
     
     $requirements = \Drupal::service('system.manager')->listRequirements();
 
@@ -137,12 +129,11 @@ class CentralizationAgentController extends ControllerBase {
         table_schema = '" . $database_name . "';"
       )->fetchAll();
     $database_size = $database_size_query[0]->size;
-    // Needless initialisation, but hey.
-    $res = [
+
+    $response = [
       "site_name" => $site_name,
       "drupal_version" => $drupal_version,
       "php_version" => $php_version,
-      //"php_info" => $php_info,
       "admin_theme" => $admin_theme,
       "default_theme" => $default_theme,
       "database_size" => $database_size,
@@ -181,7 +172,7 @@ class CentralizationAgentController extends ControllerBase {
         $module_type = 'contrib';
       }
 
-      $res['modules'][$name] = [
+      $response['modules'][$name] = [
         "title" => $module_info['name'],
         "version" => $module_info['version'],
         "type" => $module_type,
@@ -206,14 +197,14 @@ class CentralizationAgentController extends ControllerBase {
       }
 
       if (isset($theme_info['project'])) {
-        $res['themes'][$theme_info['project']] = ["version" => $theme_info['version']];
+        $response['themes'][$theme_info['project']] = ["version" => $theme_info['version']];
       }
       else {
-        $res['themes'][$name] = ["version" => $theme_info['version']];
+        $response['themes'][$name] = ["version" => $theme_info['version']];
       }
     }
 
-    $encrypted_response = CentralizationAgentEncryption::encryptOpenssl(json_encode($res));
+    $encrypted_response = CentralizationAgentEncryption::encryptOpenssl(json_encode($response));
     return new JsonResponse([
       "data" => $encrypted_response
     ]);
@@ -230,7 +221,7 @@ class CentralizationAgentController extends ControllerBase {
    * {@inheritdoc}
    */
   public function access($centralization_agent_id) {
-    $token = $this->config('centralization_agent.settings')->get('centralization_agent_token');
+    $token = $this->config('centralization_agent.settings')->get('shared_token');
     if ($token == $centralization_agent_id) {
       return AccessResult::allowed();
     }

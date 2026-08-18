@@ -2,7 +2,12 @@ centralization_agent.settings:
   type: config_object
   label: 'Centralization Agent settings'
   mapping:
-    centralization_agent_token:
+    shared_token:
       type: string
-    centralization_agent_encrypt_token:
+    encrypt_key:
       type: string
+    allowed_ips:
+      type: sequence
+      label: 'Allowed IPs'
+      sequence:
+        type: string

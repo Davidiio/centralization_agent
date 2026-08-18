@@ -13,7 +13,9 @@
 function centralization_agent_install() {
   $encrypt = \Drupal::service('centralization_agent.encrypt');
   $config = \Drupal::configFactory()->getEditable('centralization_agent.settings');
-  $config->set('centralization_agent_token', $encrypt::getToken());
-  $config->set('centralization_agent_encrypt_token', $encrypt::getToken());
-  $config->save();
+  if(empty($config->get('shared_token')) || empty($config->get('encrypt_key'))) {
+    $config->set('shared_token', $encrypt::getToken());
+    $config->set('encrypt_key', $encrypt::getEncryptKey());
+    $config->save();
+  }
 }

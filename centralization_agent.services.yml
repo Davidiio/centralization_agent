@@ -1,3 +1,6 @@
 services:
   centralization_agent.encrypt:
     class: Drupal\centralization_agent\Services\CentralizationAgentEncryption
+  centralization_agent.token_access_check:
+    class: Drupal\centralization_agent\Access\TokenAccessCheck
+    arguments: ['@config.factory']

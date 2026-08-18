@@ -1,16 +1,20 @@
 centralization_agent.status_page:
-  path: '/admin/reports/centralization-agent/{centralization_agent_id}'
+  path: '/admin/reports/centralization-agent'
   defaults:
     _controller: '\Drupal\centralization_agent\Controller\CentralizationAgentController::load'
+  methods: [GET]
   requirements:
-    _custom_access: '\Drupal\centralization_agent\Controller\CentralizationAgentController::access'
+    _custom_access: 'centralization_agent.token_access_check:access'
+    _format: 'json'
 
 centralization_agent.cache_clear:
   path: '/admin/reports/centralization-agent/cc/{centralization_agent_id}'
   defaults:
     _controller: '\Drupal\centralization_agent\Controller\CentralizationAgentController::cache_clear'
+  methods: [GET]
   requirements:
-    _custom_access: '\Drupal\centralization_agent\Controller\CentralizationAgentController::access'
+    _custom_access: 'centralization_agent.token_access_check:access'
+    _format: 'json'
 
 centralization_agent.admin_settings:
   path: '/admin/config/system/centralization-agent-configuration'
