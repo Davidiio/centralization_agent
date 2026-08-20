@@ -28,7 +28,13 @@ function centralization_agent_update_10001() {
     $config->set('encrypt_key', base64_encode(random_bytes(32)));
   }
 
+  if (empty($config->get('https_required'))) {
+    $config->set('https_required', TRUE);
+  }
+
   $config->save();
+
+  drupal_flush_all_caches();
 
   return t('Les tokens shared_token et encrypt_key ont été générés.');
 }

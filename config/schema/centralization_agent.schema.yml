@@ -6,6 +6,8 @@ centralization_agent.settings:
       type: string
     encrypt_key:
       type: string
+    https_required:
+      type: boolean
     allowed_ips:
       type: sequence
       label: 'Allowed IPs'

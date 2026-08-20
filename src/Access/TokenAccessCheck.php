@@ -18,7 +18,7 @@ class TokenAccessCheck {
   public function access(Request $request): AccessResultInterface {
 
     // https obligatoire
-    if (!$request->isSecure()) {
+    if ($this->configFactory->get('centralization_agent.settings')->get('https_required') && !$request->isSecure()) {
       return AccessResult::forbidden('HTTPS requis.');
     }
 

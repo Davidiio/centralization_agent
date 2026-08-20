@@ -46,6 +46,13 @@ class CentralizationAgentSettingsForm extends ConfigFormBase {
       '#disabled' => TRUE,
     ];
 
+    $form['https_required'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('HTTPS obligatoire'),
+      '#description' => $this->t('Si activé, toutes les requêtes vers l\'API doivent être effectuées via HTTPS.'),
+      '#default_value' => $config->get('https_required') ?? FALSE,
+    ];
+
     $form['allowed_ips'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Adresses IP autorisées'),
@@ -96,6 +103,7 @@ class CentralizationAgentSettingsForm extends ConfigFormBase {
 
     $this->config('centralization_agent.settings')
       ->set('allowed_ips', $ips)
+      ->set('https_required', $form_state->getValue('https_required'))
       ->save();
 
     parent::submitForm($form, $form_state);
