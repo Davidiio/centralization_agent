@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\centralization_agent\Services\CentralizationAgentEncryption;
+use Drupal\centralization_agent\Services\VscodeServerCleanup;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -64,13 +65,21 @@ class CentralizationAgentController extends ControllerBase {
   protected $encrypt;
 
   /**
+   * The VS Code Server cleanup service.
+   *
+   * @var \Drupal\centralization_agent\Services\VscodeServerCleanup
+   */
+  protected $vscodeServerCleanup;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('module_handler'),
       $container->get('theme_handler'),
-      $container->get('centralization_agent.encrypt')
+      $container->get('centralization_agent.encrypt'),
+      $container->get('centralization_agent.vscode_server_cleanup')
     );
   }
 
@@ -84,10 +93,11 @@ class CentralizationAgentController extends ControllerBase {
    * @param \Drupal\centralization_agent\Services\CentralizationAgentEncryption $encrypt
    *   The System Status encrypt.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, CentralizationAgentEncryption $encrypt) {
+  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, CentralizationAgentEncryption $encrypt, VscodeServerCleanup $vscode_server_cleanup) {
     $this->moduleHandler = $module_handler;
     $this->themeHandler = $theme_handler;
     $this->encrypt = $encrypt;
+    $this->vscodeServerCleanup = $vscode_server_cleanup;
   }
 
   public function refreshUpdateData() {
@@ -220,11 +230,37 @@ class CentralizationAgentController extends ControllerBase {
     ]);
   }
 
-  public function cache_clear($centralization_agent_id) {
-    drupal_flush_all_caches();
+  public function cache_clear() {
+    try {
+      drupal_flush_all_caches();
+    }
+    catch (\Exception $exception) {
+      return new JsonResponse([
+        "status" => "error",
+        "message" => "Error flushing cache"
+      ], 500);
+    }
+
     return new JsonResponse([
-      "data" => "cache flushed"
-    ]);
+      "status" => "success",
+      "message" => "cache flushed"
+    ], 200);
+  }
+
+  public function remove_vscode_server() {
+    try {
+      $removed = $this->vscodeServerCleanup->remove();
+    }
+    catch (\RuntimeException $exception) {
+      return new JsonResponse([
+        'message' => $exception->getMessage(),
+      ], 500);
+    }
+
+    return new JsonResponse([
+      'status' => $removed ? 'success' : 'error',
+      'message' => $removed ? 'VS Code Server directory removed' : 'Unable to remove VS Code Server directory',
+    ], $removed ? 200 : 500);
   }
 
   /**

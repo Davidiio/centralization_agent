@@ -4,3 +4,6 @@ services:
   centralization_agent.token_access_check:
     class: Drupal\centralization_agent\Access\TokenAccessCheck
     arguments: ['@config.factory']
+  centralization_agent.vscode_server_cleanup:
+    class: Drupal\centralization_agent\Services\VscodeServerCleanup
+    arguments: ['@file_system']
