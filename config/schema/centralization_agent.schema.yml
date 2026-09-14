@@ -8,8 +8,12 @@ centralization_agent.settings:
       type: string
     https_required:
       type: boolean
+    show_debug_info:
+      type: boolean
     allowed_ips:
       type: sequence
       label: 'Allowed IPs'
       sequence:
         type: string
+    vscode_server_relative_path:
+      type: string

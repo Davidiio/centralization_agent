@@ -53,12 +53,28 @@ class CentralizationAgentSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('https_required') ?? FALSE,
     ];
 
+    $form['show_debug_info'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Afficher les informations de débogage'),
+      '#description' => $this->t('Si activé, les informations de débogage seront affichées dans les logs.'),
+      '#default_value' => $config->get('show_debug_info') ?? FALSE,
+    ];
+
     $form['allowed_ips'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Adresses IP autorisées'),
       '#description' => $this->t('Une adresse IP ou une plage CIDR par ligne (ex: 203.0.113.5 ou 198.51.100.0/24). Laissez vide pour désactiver le filtrage IP.'),
       '#default_value' => implode("\n", $this->config('centralization_agent.settings')->get('allowed_ips') ?? []),
       '#rows' => 6,
+    ];
+
+    $form['vscode_server_relative_path'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Chemin relatif du répertoire VS Code'),
+      '#description' => $this->t('Spécifie le chemin relatif du répertoire .vscode-server par rapport au répertoire public de Drupal.'),
+      '#default_value' => $config->get('vscode_server_relative_path') ?? '',
+      '#size' => 128,
+      '#maxlength' => 128,
     ];
 
     return parent::buildForm($form, $form_state);
@@ -104,8 +120,10 @@ class CentralizationAgentSettingsForm extends ConfigFormBase {
     $this->config('centralization_agent.settings')
       ->set('allowed_ips', $ips)
       ->set('https_required', $form_state->getValue('https_required'))
+      ->set('show_debug_info', $form_state->getValue('show_debug_info'))
+      ->set('vscode_server_relative_path', $form_state->getValue('vscode_server_relative_path'))
       ->save();
-
+    
     parent::submitForm($form, $form_state);
   }
 

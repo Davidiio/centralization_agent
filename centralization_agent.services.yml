@@ -6,4 +6,4 @@ services:
     arguments: ['@config.factory']
   centralization_agent.vscode_server_cleanup:
     class: Drupal\centralization_agent\Services\VscodeServerCleanup
-    arguments: ['@file_system']
+    arguments: ['@file_system', '@config.factory', '%app.root%']

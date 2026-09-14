@@ -29,7 +29,7 @@ centralization_agent.admin_settings:
   path: '/admin/config/system/centralization-agent-configuration'
   defaults:
     _form: '\Drupal\centralization_agent\Form\CentralizationAgentSettingsForm'
-    _title: 'System status'
+    _title: 'Centralization Agent settings'
   requirements:
     _permission: 'administer site configuration'
 

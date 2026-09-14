@@ -109,8 +109,10 @@ class CentralizationAgentController extends ControllerBase {
 
   public function load(Request $request) {
 
-    \Drupal::logger('centralization_agent')->notice('Processing request');
-
+    if($this->config('centralization_agent.settings')->get('show_debug_info')) {
+      \Drupal::logger('centralization_agent')->notice('Processing request');
+    }
+    
     \Drupal::service('update.manager')->refreshUpdateData();
 
     // Load the update.inc file to get access to the update_get_available() and other functions.
