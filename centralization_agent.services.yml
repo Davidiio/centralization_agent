@@ -7,3 +7,6 @@ services:
   centralization_agent.vscode_server_cleanup:
     class: Drupal\centralization_agent\Services\VscodeServerCleanup
     arguments: ['@file_system', '@config.factory', '%app.root%']
+  centralization_agent.core_update_tracker:
+    class: Drupal\centralization_agent\Services\CoreUpdateTracker
+    arguments: ['@state']

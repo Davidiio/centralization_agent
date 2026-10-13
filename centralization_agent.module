@@ -20,3 +20,7 @@ function centralization_agent_help($path, $arg) {
     break;
   }
 }
+
+function centralization_agent_cron() {
+  \Drupal::service('centralization_agent.core_update_tracker')->check();
+}

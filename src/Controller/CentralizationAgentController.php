@@ -166,6 +166,7 @@ class CentralizationAgentController extends ControllerBase {
       "available_updates" => $available_updates,
       "general_update_status" => $general_update_status,
       "drupal_core_update_status" => $drupal_core_update_status,
+      "drupal_core_update_info" => \Drupal::service('centralization_agent.core_update_tracker')->getInfo(),
     ];
 
     $drupal_modules = $this->moduleHandler->getModuleList();
